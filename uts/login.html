@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NYPD Officer Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            background: #0b1e39;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 950px;
+        }
+
+        .login-card {
+            background: #102947;
+            padding: 35px;
+            border-radius: 10px;
+            border: 1px solid #1e3f66;
+        }
+
+        .left-image-container {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 350px;
+        }
+
+        .left-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .input-group-text {
+            background: #17375b;
+            color: #d2e6ff;
+        }
+
+        .btn-primary {
+            background: #1d4e89;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #173c6a;
+        }
+
+        .btn-link {
+            font-size: 0.9rem;
+        }
+
+        .alert {
+            font-size: 0.85rem;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h3 class="text-center fw-bold mb-4">
+        <i class="fa-solid fa-shield-halved me-2"></i> NYPD Secure Login
+    </h3>
+
+    <div class="row justify-content-center gx-4">
+
+        <div class="col-md-6 mb-4">
+            <div class="left-image-container">
+                <img src="assets/New York City Police Department.jpeg" class="left-image" alt="NYPD">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="login-card">
+
+                <div id="errorBox" class="alert alert-danger d-none">
+                    Invalid login credentials!
+                </div>
+
+                <form id="loginForm">
+
+                    <label class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="username" class="form-control" required>
+                    </div>
+
+                    <label class="form-label mt-3">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="password" class="form-control" required>
+                        <span class="input-group-text" style="cursor:pointer;" onclick="togglePass()">
+                            <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                        </span>
+                    </div>
+
+                    <button class="btn btn-primary w-100 mt-4 py-2">
+                        Login
+                    </button>
+
+                    <div class="text-center mt-2">
+                        <a href="register.html" class="btn btn-link text-light">Create Account</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="text-center mt-3 text-light-50">
+        © NYPD Internal System
+    </footer>
+</div>
+
+
+<script>
+function togglePass(){
+    const pass = document.getElementById("password");
+    const eye = document.getElementById("eyeIcon");
+
+    pass.type = pass.type === "password" ? "text" : "password";
+    eye.classList.toggle("fa-eye");
+    eye.classList.toggle("fa-eye-slash");
+}
+
+document.getElementById("loginForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const data = {
+        username: document.getElementById("username").value.trim(),
+        password: document.getElementById("password").value.trim()
+    };
+
+    try {
+        const response = await fetch("http://localhost/nypd_api/officers/login.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        console.log(result);
+
+        if(result.status === true){
+            localStorage.setItem("officer_id", result.data.id);
+            window.location.href = "officer_menu.html";
+        } else {
+            document.getElementById("errorBox").classList.remove("d-none");
+        }
+
+    } catch (error) {
+        alert("Failed to connect API!");
+        console.error(error);
+    }
+});
+</script>
+
+</body>
+</html>

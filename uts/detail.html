@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NYPD Detail Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark" style="background:#003366;">
+    <div class="container-fluid">
+        <a href="index.html" class="navbar-brand">Back</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h2 id="judul"></h2>
+    <p id="isi"></p>
+</div>
+
+<script>
+const q = new URLSearchParams(window.location.search);
+const info = q.get("info");
+
+let judul = "";
+let isi = "";
+
+if(info === "patrol"){
+    judul = "NYPD Patrol Division";
+    isi = "The Patrol Services Bureau is the largest and most visible bureau of the NYPD. Its main duties include maintaining public order, preventing crime through routine patrol, and responding quickly to 911 emergency calls. Patrol officers also perform community policing to build trust with local residents, monitor traffic flow, and assist in citywide events or emergencies. Their presence on the streets serves as a deterrent to crime and ensures that public safety is maintained at all times.";
+}
+else if(info === "crime"){
+    judul = "Crime Reporting";
+    isi = "Crime reporting in New York City is handled through several official channels. For emergencies or crimes in progress, residents must call 911. For non-emergency issues—such as noise complaints, minor property damage, or lost items—311 is used. The NYPD Online Reporting Portal allows citizens to file certain reports without visiting a precinct. Anonymous tips can be submitted via Crime Stoppers for crimes such as drug activity or wanted suspects, helping the police gather valuable information while protecting the caller’s identity.";
+}
+else if(info === "badge"){
+    judul = "NYPD Badge & Rank";
+    isi = "The NYPD badge represents authority, discipline, and service to the community. The ranking system includes Police Officer, Detective (levels 1–3), Sergeant, Lieutenant, and Captain. Higher ranks include Deputy Inspector, Inspector, Deputy Chief, Assistant Chief, and Chief of Department. Each rank carries specific responsibilities, from supervising patrol units to managing precinct operations and overseeing major citywide law-enforcement strategies. As officers advance in rank, they take on increased leadership and decision-making roles.";
+}
+else {
+    judul = "Information Not Found";
+    isi = "";
+}
+
+document.getElementById("judul").innerHTML = judul;
+document.getElementById("isi").innerHTML = isi;
+</script>
+
+<footer class="bg-dark text-white text-center p-3 mt-4">
+    @Copyright by 23552011428_khoirul umam_23CNS B
+</footer>
+
+</body>
+</html>

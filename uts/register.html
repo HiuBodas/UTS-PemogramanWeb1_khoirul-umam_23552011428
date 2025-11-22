@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NYPD Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            background: #0b1e39;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dce6f4;
+            font-family: 'Segoe UI', sans-serif;
+            padding: 20px;
+        }
+
+        .register-card {
+            background: #102947;
+            border-radius: 12px;
+            padding: 35px;
+            width: 100%;
+            max-width: 470px;
+            border: 1px solid #1e3f66;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .input-group-text {
+            background: #17375b;
+            color: #d2e6ff;
+        }
+
+        .btn-primary {
+            background: #1d4e89;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #173c6a;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            background: #102947;
+            color: #dce6f4;
+            text-decoration: none;
+            border: 1px solid #1e3f66;
+            transition: .25s;
+        }
+
+        .back-btn i {
+            margin-right: 6px;
+        }
+
+        .back-btn:hover {
+            background: #1d4e89;
+            color: #ffffff;
+        }
+
+        .alert {
+            font-size: .85rem;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<a href="login.html" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i> Back
+</a>
+
+<div class="register-card">
+    <h3><i class="fa-solid fa-user-shield me-2"></i>Create Officer Account</h3>
+
+    <div id="successBox" class="alert alert-success d-none">
+        Account created! Redirecting to Login...
+    </div>
+
+    <form id="registerForm">
+
+        <label class="form-label">Full Name</label>
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fa-solid fa-id-badge"></i></span>
+            <input type="text" id="regName" class="form-control" required>
+        </div>
+
+        <label class="form-label">Badge Number</label>
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fa-solid fa-shield-halved"></i></span>
+            <input type="text" id="regBadge" class="form-control" required>
+        </div>
+
+        <label class="form-label">Username</label>
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+            <input type="text" id="regUser" class="form-control" required>
+        </div>
+
+        <label class="form-label">Password</label>
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+            <input type="password" id="regPass" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 fw-bold py-2">
+            Register
+        </button>
+
+    </form>
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const data = {
+        fullname: document.getElementById("regName").value,
+        badge: document.getElementById("regBadge").value,
+        username: document.getElementById("regUser").value,
+        password: document.getElementById("regPass").value
+    };
+
+    try {
+        const response = await fetch("http://localhost/uts/nypd_api/officers/register.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        console.log(result);
+
+        if (result.status === true){
+            document.getElementById("successBox").classList.remove("d-none");
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1500);
+        } else {
+            alert(result.message);
+        }
+
+    } catch (error) {
+        alert("Failed to connect API!");
+        console.error(error);
+    }
+});
+</script>
+
+</body>
+</html>
